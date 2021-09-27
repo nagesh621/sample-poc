@@ -1,0 +1,9 @@
+spring.datasource.url: jdbc:h2:file:./camunda-h2-database
+
+spring.jpa:
+  database: h2
+  hibernate.ddl-auto: create-drop
+  show-sql: true
+camunda.bpm.admin-user:
+  id: demo
+  password: demo
