@@ -2,6 +2,8 @@ package com.nagesh.test.controller;
 
 import com.nagesh.test.entity.Workflow;
 import com.nagesh.test.repo.WorkflowRepository;
+import com.nagesh.test.util.WorkflowUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +17,12 @@ public class WorkflowController {
 
     private final WorkflowRepository workflowRepository;
 
-    public WorkflowController(WorkflowRepository workflowRepository) {
+    private final WorkflowUtil util;
+
+    @Autowired
+    public WorkflowController(WorkflowRepository workflowRepository, WorkflowUtil util) {
         this.workflowRepository = workflowRepository;
+        this.util = util;
     }
 
     @GetMapping
@@ -32,6 +38,7 @@ public class WorkflowController {
     @PostMapping
     public ResponseEntity createWorkflow(@RequestBody Workflow workflow) throws URISyntaxException {
         Workflow savedWorkflow = workflowRepository.save(workflow);
+        util.startWorkflow();
         return ResponseEntity.created(new URI("/workflows/" + savedWorkflow.getId())).body(savedWorkflow);
     }
 
