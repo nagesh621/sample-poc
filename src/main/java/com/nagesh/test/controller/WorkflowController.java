@@ -1,6 +1,7 @@
 package com.nagesh.test.controller;
 
 import com.nagesh.test.entity.Workflow;
+import com.nagesh.test.entity.Process;
 import com.nagesh.test.repo.WorkflowRepository;
 import com.nagesh.test.util.WorkflowUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,8 @@ public class WorkflowController {
     @PostMapping
     public ResponseEntity createWorkflow(@RequestBody Workflow workflow) throws URISyntaxException {
         Workflow savedWorkflow = workflowRepository.save(workflow);
-        util.startWorkflow(workflow.getId());
+        Process process = util.startWorkflow(savedWorkflow.getId());
+        util.moveToken(process.getId());
         return ResponseEntity.created(new URI("/workflows/" + savedWorkflow.getId())).body(savedWorkflow);
     }
 
