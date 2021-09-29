@@ -1,5 +1,8 @@
 package com.nagesh.test.util;
 
+import com.nagesh.test.entity.Process;
+import com.nagesh.test.repo.ProcessRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -12,7 +15,14 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class WorkflowUtil {
 
-    public void startWorkflow()
+    private final ProcessRepository repo;
+
+    @Autowired
+    public WorkflowUtil(ProcessRepository repo) {
+        this.repo = repo;
+    }
+
+    public void startWorkflow(Long workflowId)
     {
         final String uri = "http://localhost:8080/engine-rest/process-definition/key/sample-project-process/start";
         RestTemplate restTemplate = new RestTemplate();
@@ -21,10 +31,10 @@ public class WorkflowUtil {
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
 
-
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-        ResponseEntity<String> responses = restTemplate.postForEntity(uri, request, String.class);
+        Process response = restTemplate.postForObject(uri, request, Process.class);
+        response.setWorkflowId(workflowId);
+        repo.save(response);
 
-        System.out.println(responses);
     }
 }
