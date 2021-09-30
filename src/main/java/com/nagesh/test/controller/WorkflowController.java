@@ -38,9 +38,10 @@ public class WorkflowController {
 
     @PostMapping
     public ResponseEntity createWorkflow(@RequestBody Workflow workflow) throws URISyntaxException {
+        Boolean review = false;
         Workflow savedWorkflow = workflowRepository.save(workflow);
-        Process process = util.startWorkflow(savedWorkflow.getId());
-        util.moveToken(process.getId());
+        Process process = util.startWorkflow(savedWorkflow.getId(), "manual");
+        util.moveToken(process.getId(), review);
         return ResponseEntity.created(new URI("/workflows/" + savedWorkflow.getId())).body(savedWorkflow);
     }
 

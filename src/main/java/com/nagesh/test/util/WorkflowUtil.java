@@ -24,15 +24,16 @@ public class WorkflowUtil {
         this.repo = repo;
     }
 
-    public Process startWorkflow(Long workflowId)
+    public Process startWorkflow(Long workflowId, String closure)
     {
-        final String uri = "http://localhost:8080/engine-rest/process-definition/key/sample-project-process/start";
+        final String uri = "http://localhost:8080/engine-rest/process-definition/key/Process_03mhl62/start";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        String reqJSON= "{\"variables\": {\"closure\": {\"value\": \""+closure+",\"type\":\"String\"}}}";
+        HttpEntity<String> request = new HttpEntity<>(reqJSON, headers);
 
         Process response = restTemplate.postForObject(uri, request, Process.class);
         response.setWorkflowId(workflowId);
@@ -40,7 +41,7 @@ public class WorkflowUtil {
         return response;
     }
 
-    public void moveToken(String processInstanceId){
+    public void moveToken(String processInstanceId, boolean review){
         String uri = "http://localhost:8080/engine-rest/task/?processInstanceId="+processInstanceId;
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -54,7 +55,9 @@ public class WorkflowUtil {
         uri="http://localhost:8080/engine-rest/task/"+ taskList.get(0).getId()+"/complete";
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        String reqJSON= "{\"variables\": {\"review\": {\"value\": \""+review+",\"type\":\"String\"}}}";
+
+        HttpEntity<String> request = new HttpEntity<>(reqJSON, headers);
 
         String result = restTemplate.postForObject(uri, request, String.class);
 
