@@ -1,45 +1,46 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
-import AppNavBar from './AppNavBar';
-import { Link, withRouter } from 'react-router-dom';
-import Modal from 'react-modal';
 
-class WorkflowList extends Component {
+class PendingWFList extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            closedworkflows: []
+            workflows: []
         };
     }
 
     componentDidMount() {
-            fetch('/workflow/closedwf')
+        fetch('/workflow')
             .then(response => response.json())
-            .then(data => this.setState({closedworkflows: data}));
+            .then(data => this.setState({workflows: data}));
     }
  
     
     render() {
-        const {closedworkflows, isLoading} = this.state;
+        const {workflows, isLoading} = this.state;
     
         if (isLoading) {
             return <p>Loading...</p>;
         }
     
-        
-
-        const closedworkflowList = closedworkflows.map(closedworkflows => {
-            return <tr key={closedworkflows.id}>
-                <td>{closedworkflows.id}</td>
-                <td style={{whiteSpace: 'nowrap'}}>{closedworkflows.workflowtype}</td>
-                <td>{closedworkflows.tradecenter}</td>
-                <td>{closedworkflows.branchcode}</td>
-                <td>{closedworkflows.refid}</td>
-                <td>{closedworkflows.queue}</td>
-                <td>{closedworkflows.productcode}</td>
-                <td>{closedworkflows.currency}{closedworkflows.amount}</td>
-                <td>{closedworkflows.closuretype}</td>
+        const workflowList = workflows.map(workflows => {
+            return <tr key={workflows.id}>
+                <td>{workflows.id}</td>
+                <td style={{whiteSpace: 'nowrap'}}>{workflows.workflowtype}</td>
+                <td>{workflows.tradecenter}</td>
+                <td>{workflows.branchcode}</td>
+                <td>{workflows.refid}</td>
+                <td>{workflows.queue}</td>
+                <td>{workflows.productcode}</td>
+                <td>{workflows.currency}{workflows.amount}</td>
+                <td>{workflows.closuretype}</td>
+                <td>
+                    <ButtonGroup>
+                        <Button size="sm" color="primary" href={"/workflow/" + workflows.id}>Edit</Button>
+                        <Button size="sm" color="danger" href={"/workflow/close/" + workflows.id}>Close</Button>
+                    </ButtonGroup>
+                </td>
             </tr>
         });
     
@@ -62,7 +63,7 @@ class WorkflowList extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                        {closedworkflowList}
+                        {workflowList}
                         </tbody>
                     </Table>
                 </Container>
@@ -72,4 +73,4 @@ class WorkflowList extends Component {
 }
 
 
-export default WorkflowList;
+export default PendingWFList;

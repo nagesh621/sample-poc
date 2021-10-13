@@ -32,7 +32,8 @@ public class WorkflowUtil {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        String reqJSON= "{\"variables\": {\"closure\": {\"value\": \""+closure+",\"type\":\"String\"}}}";
+        String reqJSON= "{\"variables\": {\"closure\": {\"value\": \""+closure+"\",\"type\":\"String\"}}}";
+        System.out.println(reqJSON);
         HttpEntity<String> request = new HttpEntity<>(reqJSON, headers);
 
         Process response = restTemplate.postForObject(uri, request, Process.class);
@@ -55,8 +56,8 @@ public class WorkflowUtil {
         uri="http://localhost:8080/engine-rest/task/"+ taskList.get(0).getId()+"/complete";
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        String reqJSON= "{\"variables\": {\"review\": {\"value\": \""+review+",\"type\":\"String\"}}}";
-
+        String reqJSON= "{\"variables\": {\"review\": {\"value\": \""+review+"\",\"type\":\"Boolean\"}}}";
+        System.out.println(reqJSON);
         HttpEntity<String> request = new HttpEntity<>(reqJSON, headers);
 
         String result = restTemplate.postForObject(uri, request, String.class);

@@ -1,48 +1,51 @@
 import React, { Component } from 'react';
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
-import AppNavBar from './AppNavBar';
+
 import { Link, withRouter } from 'react-router-dom';
 import Modal from 'react-modal';
 
-class WorkflowList extends Component {
+class ReviewWFList extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            closedworkflows: []
+            reviewworkflows: []
         };
     }
 
     componentDidMount() {
-            fetch('/workflow/closedwf')
+            fetch('/workflow/reviewwf')
             .then(response => response.json())
-            .then(data => this.setState({closedworkflows: data}));
+            .then(data => this.setState({reviewworkflows: data}));           
     }
  
     
     render() {
-        const {closedworkflows, isLoading} = this.state;
+        const {reviewworkflows, isLoading} = this.state;
     
         if (isLoading) {
             return <p>Loading...</p>;
         }
-    
-        
 
-        const closedworkflowList = closedworkflows.map(closedworkflows => {
-            return <tr key={closedworkflows.id}>
-                <td>{closedworkflows.id}</td>
-                <td style={{whiteSpace: 'nowrap'}}>{closedworkflows.workflowtype}</td>
-                <td>{closedworkflows.tradecenter}</td>
-                <td>{closedworkflows.branchcode}</td>
-                <td>{closedworkflows.refid}</td>
-                <td>{closedworkflows.queue}</td>
-                <td>{closedworkflows.productcode}</td>
-                <td>{closedworkflows.currency}{closedworkflows.amount}</td>
-                <td>{closedworkflows.closuretype}</td>
+        const reviewworkflowList = reviewworkflows.map(reviewworkflows => {
+            return <tr key={reviewworkflows.id}>
+                <td>{reviewworkflows.id}</td>
+                <td style={{whiteSpace: 'nowrap'}}>{reviewworkflows.workflowtype}</td>
+                <td>{reviewworkflows.tradecenter}</td>
+                <td>{reviewworkflows.branchcode}</td>
+                <td>{reviewworkflows.refid}</td>
+                <td>{reviewworkflows.queue}</td>
+                <td>{reviewworkflows.productcode}</td>
+                <td>{reviewworkflows.currency}{reviewworkflows.amount}</td>
+                <td>{reviewworkflows.closuretype}</td>
+                <td>
+                    <ButtonGroup>
+                        <Button size="sm" color="primary" href={"/workflow/" + reviewworkflows.id}>Edit</Button>
+                    </ButtonGroup>
+                </td>
             </tr>
         });
-    
+        
         return (
             <div>
                 <Container fluid>
@@ -62,9 +65,9 @@ class WorkflowList extends Component {
                         </tr>
                         </thead>
                         <tbody>
-                        {closedworkflowList}
+                        {reviewworkflowList}
                         </tbody>
-                    </Table>
+                    </Table>      
                 </Container>
             </div>
         );
@@ -72,4 +75,4 @@ class WorkflowList extends Component {
 }
 
 
-export default WorkflowList;
+export default ReviewWFList;
