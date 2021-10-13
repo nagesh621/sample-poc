@@ -1,5 +1,6 @@
 package com.nagesh.test.util;
 
+import com.nagesh.test.entity.IdentityLinks;
 import com.nagesh.test.entity.Process;
 import com.nagesh.test.entity.ProcessTask;
 import com.nagesh.test.repo.ProcessRepository;
@@ -63,5 +64,29 @@ public class WorkflowUtil {
         String result = restTemplate.postForObject(uri, request, String.class);
 
         System.out.println(result);
+    }
+
+    public IdentityLinks canClose(String processInstanceId){
+
+        String uri = "http://localhost:8080/engine-rest/task/?processInstanceId="+processInstanceId;
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        ResponseEntity<List<ProcessTask>> rateResponse =
+                restTemplate.exchange(uri,
+                        HttpMethod.GET, null, new ParameterizedTypeReference<List<ProcessTask>>() {
+                        });
+        List<ProcessTask> taskList = rateResponse.getBody();
+
+        uri="http://localhost:8080/engine-rest/task/"+ taskList.get(0).getId()+"/identity-links";
+
+
+        ResponseEntity<List<IdentityLinks>> idResponse =
+                restTemplate.exchange(uri,
+                        HttpMethod.GET, null, new ParameterizedTypeReference<List<IdentityLinks>>() {
+                        });
+        List<IdentityLinks> idLinks = idResponse.getBody();
+        System.out.println(idLinks.get(0).getUserId());
+        return idLinks.get(0);
     }
 }

@@ -35,6 +35,17 @@ class WorkflowClose extends Component {
             const workflow = await (await fetch(`/workflow/${this.props.match.params.id}`)).json();
             this.setState({item: workflow});
         }
+            let userid='';
+
+            await fetch(`/workflow/canClose/${this.props.match.params.id}`)
+            .then(res => res.json())
+            .then(
+                (data) => {userid = data.userId;}
+            )
+            if(userid === localStorage.getItem('uname')){
+            window.alert('Work Order cannot be closed by same user group');
+            this.props.history.push('/workflow');
+        }
     }
 
     async handleSubmit(event) {

@@ -1,5 +1,6 @@
 package com.nagesh.test.controller;
 
+import com.nagesh.test.entity.IdentityLinks;
 import com.nagesh.test.entity.Workflow;
 import com.nagesh.test.entity.Process;
 import com.nagesh.test.repo.ProcessRepository;
@@ -48,6 +49,14 @@ public class WorkflowController {
     @GetMapping("/{id}")
     public Workflow getWorkflow(@PathVariable Long id) {
         return workflowRepository.findById(id).orElseThrow(RuntimeException::new);
+    }
+
+    @GetMapping("/canClose/{id}")
+    public ResponseEntity getCanClose(@PathVariable Long id) throws URISyntaxException{
+        Workflow workflow = workflowRepository.findById(id).orElseThrow(RuntimeException::new);
+        Process process = processRepo.findByWorkflowId(workflow.getId());
+        IdentityLinks idlinks = util.canClose(process.getId());
+        return ResponseEntity.created(new URI("/workflows/canClose/" + id)).body(idlinks);
     }
 
     @PostMapping

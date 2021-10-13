@@ -32,7 +32,7 @@
       <bpmn:incoming>Flow_14w4eg9</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1gkoeu2" name="Close Work Order" sourceRef="Activity_1iq1gj7" targetRef="Event_1pdmleb" />
-    <bpmn:userTask id="Activity_0jy4gku" name="Manual Closure of Work Order" camunda:candidateGroups="nocusergroup">
+    <bpmn:userTask id="Activity_0jy4gku" name="Manual Closure of Work Order" camunda:candidateUsers="nocuser" camunda:candidateGroups="nocusergroup">
       <bpmn:incoming>Flow_01qfi0o</bpmn:incoming>
       <bpmn:outgoing>Flow_1ovi7bq</bpmn:outgoing>
     </bpmn:userTask>
@@ -57,7 +57,7 @@
       <bpmn:incoming>Flow_1gkoeu2</bpmn:incoming>
       <bpmn:outgoing>Flow_14w4eg9</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_1594phg">
-        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">2M</bpmn:timeDuration>
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">2D</bpmn:timeDuration>
       </bpmn:timerEventDefinition>
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_14w4eg9" sourceRef="Event_1pdmleb" targetRef="Event_1mx0twp" />
